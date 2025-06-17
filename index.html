@@ -5,6 +5,99 @@
   <title>Advanced Custom Code Editor with Enhanced Background & Colors</title>
   <style>
 
+      #customBtn {
+    padding: 6px 16px;
+    background: linear-gradient(45deg, #4a90e2, #357ABD);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(53, 122, 189, 0.5);
+    transition: background 0.3s ease;
+  }
+  #customBtn:hover {
+    background: linear-gradient(45deg, #357ABD, #4a90e2);
+    box-shadow: 0 3px 7px rgba(53, 122, 189, 0.7);
+  }
+
+    /* Smaller custom button styling */
+#customBtn {
+  padding: 6px 16px;
+  background: linear-gradient(45deg, #4a90e2, #357ABD);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(53, 122, 189, 0.5);
+  transition: background 0.3s ease;
+}
+#customBtn:hover {
+  background: linear-gradient(45deg, #357ABD, #4a90e2);
+  box-shadow: 0 3px 7px rgba(53, 122, 189, 0.7);
+}
+
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background-size: cover;
+      background-position: center;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    select {
+      font-size: 16px;
+      padding: 8px 12px;
+    }
+
+    /* Popup panel styles */
+    #uploadPanel {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 20px 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      display: none;
+      z-index: 1000;
+      width: 300px;
+      text-align: center;
+    }
+
+    #uploadPanel input[type="file"] {
+      margin-top: 15px;
+      width: 100%;
+    }
+
+    #uploadPanel button {
+      margin-top: 20px;
+      padding: 8px 16px;
+      font-size: 14px;
+      cursor: pointer;
+      background-color: #007bff;
+      border: none;
+      color: white;
+      border-radius: 4px;
+    }
+
+    /* Optional overlay behind panel */
+    #overlay {
+      position: fixed;
+      top:0; left:0; right:0; bottom:0;
+      background: rgba(0,0,0,0.4);
+      display: none;
+      z-index: 900;
+    }
+
+
 #loadingScreen {
   position: fixed;
   inset: 0;
@@ -222,10 +315,10 @@
 
 #tabBar {
   position: absolute;
-  inset: 0 0 auto 0; /* shorthand for top:0; left:0; right:0; */
+  inset: 0 0 auto 0;
   height: 42px;
 
-  background-color: var(--tab-bg);
+  background-color: rgba(37, 37, 38, 0.6); /* semi-transparent */
   border-bottom: 1px solid #3C3C3C;
 
   display: flex;
@@ -242,22 +335,8 @@
 
   z-index: 3;
 
-  /* Custom scrollbar for Firefox */
   scrollbar-width: thin;
   scrollbar-color: #555 transparent;
-
-  /* Custom scrollbar for WebKit browsers */
-  /* Chrome, Safari, Edge */
-  &::-webkit-scrollbar {
-    height: 6px;
-  }
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: #555;
-    border-radius: 3px;
-  }
 }
 
 
@@ -297,6 +376,22 @@
     color 0.3s ease,
     border-color 0.3s ease,
     background-color 0.3s ease;
+
+    .tab {
+  /* existing styles... */
+  transition: 
+    color 0.4s ease,
+    background-color 0.4s ease,
+    border-color 0.4s ease;
+}
+
+/* Also add transition for the underline (::after) */
+.tab::after {
+  transition: 
+    background-color 0.4s ease,
+    transform 0.3s ease;
+}
+
 }
 
 
@@ -480,6 +575,90 @@
       background: transparent !important;
       transition: color 0.5s ease;
     }
+
+     #settingsPage {
+    display: none;
+    max-width: 400px;
+    margin: 2rem auto 0 auto;
+    background: #fff;
+    padding: 1.5rem 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  /* Tab header style */
+  .tab-header {
+    display: flex;
+    border-bottom: 2px solid #ddd;
+    margin-bottom: 1rem;
+    cursor: default;
+  }
+  .tab-header > div {
+    flex: 1;
+    padding: 0.5rem 0;
+    text-align: center;
+    font-weight: 600;
+    color: #1d4ed8;
+    border-bottom: 2px solid #1d4ed8;
+  }
+
+  /* Login/Create buttons */
+  #btn-login, #btn-create {
+    flex: 1;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  #btn-login {
+    margin-right: 0.5rem;
+    background: #1d4ed8;
+    color: #fff;
+  }
+  #btn-create {
+    margin-left: 0.5rem;
+    background: #e0e7ff;
+    color: #1d4ed8;
+  }
+
+  /* Form inputs */
+  form label {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    display: block;
+  }
+  form input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1.5px solid #ccc;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    box-sizing: border-box;
+  }
+
+  /* Submit button */
+  form button[type="submit"] {
+    width: 100%;
+    padding: 0.6rem;
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    background: #1d4ed8;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  #form-message {
+    margin-top: 1rem;
+    font-weight: 600;
+    text-align: center;
+  }
+
+    
   </style>
 </head>
 <body>
@@ -497,8 +676,14 @@
         <option value="starsTwinkle">Twinkling Stars</option>
         <option value="purpleParticles">Purple Particles</option>
         <option value="expandingCircles">Expanding Circles</option>
-        <option value="Engine6.0 Ai">Engine6.0 Ai</option>
+        <option value="Engine6.0 Ai">Engine6.0 Ai(comming soon)</option>
       </select>
+  <button id="customBtn">Upload Custom Background</button>
+  <input type="file" id="audioUpload" accept="audio/mp3,audio/*" style="display:none" />
+
+>
+
+      <input type="file" id="bgUpload" accept="image/*" style="display: none;">
 
       <input id="colorSelector" type="color" value="#007ACC" title="Pick a color" />
 
@@ -513,7 +698,9 @@
   <div class="loading-text">Loading <strong>Engine6.0</strong> · <span>Pulse Engine</span></div>
 </div>
 
-  
+
+
+    <div id="overlay"></div>
 
   <div id="container"></div>
 
@@ -523,8 +710,8 @@
 
     let editor, currentTab = 'Tab1';
     const tabContents = {
-      'Tab1': '-- Lua code here\nprint("Hello from Tab 1")',
-      'Tab2': '-- Another tab\nprint("Hello from Tab 2")'
+      'Tab1': '-- Lua code here\nprint("Hello World   (("made by duckey"))',
+      'Tab2': '-- Tab 2\nprint("(Hello World)")'
     };
 
     const tabBar = document.getElementById('tabBar');
@@ -1048,7 +1235,42 @@
         loadingScreen.style.display = 'none';
       }, 600); // match transition duration
     }
-  }, 10000);
+  }, 3000);
+   const customBtn = document.getElementById('customBtn');
+    const fileInput = document.getElementById('bgUpload');
+
+    customBtn.addEventListener('click', () => {
+      fileInput.click(); // open file picker
+    });
+
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      if (!file.type.startsWith('image/')) {
+        alert('Please upload a valid image file.');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        document.body.style.backgroundImage = `url('${event.target.result}')`;
+      };
+      reader.readAsDataURL(file);
+    });
+
+      const settingsBtn = document.getElementById('customBtn');
+  const settingsPage = document.getElementById('settingsPage');
+
+  settingsBtn.addEventListener('click', () => {
+    if (settingsPage.style.display === 'block') {
+      settingsPage.style.display = 'none';
+    } else {
+      settingsPage.style.display = 'block';
+      settingsPage.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+
 
   </script>
 </body>
