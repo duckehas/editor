@@ -5,6 +5,62 @@
   <title>Advanced Custom Code Editor with Enhanced Background & Colors</title>
   <style>
 
+#loadingScreen {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, #0d0d12, #000);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #d0d7ff;
+  font-family: 'Segoe UI', sans-serif;
+  z-index: 9999;
+}
+
+.pulse-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #4da6ff;
+  box-shadow: 0 0 8px #4da6ff88;
+  animation: pulse 1.2s infinite ease-in-out;
+  margin-bottom: 20px;
+}
+
+.loading-text {
+  font-size: 16px;
+  text-align: center;
+  color: #b0bfff;
+  letter-spacing: 0.5px;
+}
+
+.loading-text strong {
+  color: #ffffff;
+}
+
+.loading-text span {
+  color: #77caff;
+  font-weight: 500;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 8px #4da6ff88;
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5);
+    box-shadow: 0 0 20px #4da6ffcc;
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 8px #4da6ff88;
+    opacity: 1;
+  }
+}
 
     
 
@@ -166,21 +222,44 @@
 
 #tabBar {
   position: absolute;
-  top: 0; left: 0; right: 0;
+  inset: 0 0 auto 0; /* shorthand for top:0; left:0; right:0; */
   height: 42px;
-  background: var(--tab-bg);
-  z-index: 3;
+
+  background-color: var(--tab-bg);
+  border-bottom: 1px solid #3C3C3C;
+
   display: flex;
   align-items: center;
+  gap: 12px;
+
   padding: 0 12px;
-  border-bottom: 1px solid #3C3C3C;
+
+  overflow-x: auto;
+  scroll-behavior: smooth;
+
   user-select: none;
   font-weight: 600;
-  gap: 12px;
-  overflow-x: auto;
+
+  z-index: 3;
+
+  /* Custom scrollbar for Firefox */
   scrollbar-width: thin;
   scrollbar-color: #555 transparent;
+
+  /* Custom scrollbar for WebKit browsers */
+  /* Chrome, Safari, Edge */
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #555;
+    border-radius: 3px;
+  }
 }
+
 
 /* Webkit scrollbar for better look */
 #tabBar::-webkit-scrollbar {
@@ -196,22 +275,52 @@
 
 .tab {
   position: relative;
-  padding: 8px 18px;
-  background: transparent;
-  color: var(--tab-color);
-  cursor: pointer;
-  border: none;
-  font-size: 14px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
+
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+
+  color: var(--tab-color);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.08); /* subtle white outline */
+  border-radius: 4px;
+
+  cursor: pointer;
   white-space: nowrap;
   flex-shrink: 0;
+
   outline-offset: 2px;
-  transition: color 0.3s ease;
+  transition: 
+    color 0.3s ease,
+    border-color 0.3s ease,
+    background-color 0.3s ease;
 }
 
-/* Animated underline */
+
+
+/* File icon style */
+.tab .file-icon {
+  width: 16px;
+  height: 16px;
+  fill: var(--tab-color);
+  flex-shrink: 0;
+  transition: fill 0.3s ease;
+}
+
+.tab:hover {
+  color: var(--tab-hover-color);
+  background-color: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.tab.active .file-icon {
+  fill: var(--tab-active-color);
+}
+
+/* Persistent underline with subtle white border */
 .tab::after {
   content: "";
   position: absolute;
@@ -219,11 +328,15 @@
   left: 20%;
   width: 60%;
   height: 2.5px;
-  background: transparent;
+
+  background-color: var(--tab-color);
   border-radius: 2px 2px 0 0;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+
+  box-shadow: inset 0 -1.5px 0 0 #fff;
+
   transform-origin: center;
-  transform: scaleX(0);
+  transform: scaleX(1);
+  transition: background-color 0.3s ease;
 }
 
 .tab:hover {
@@ -232,30 +345,33 @@
 
 .tab:hover::after {
   background-color: var(--tab-hover-color);
-  transform: scaleX(1);
 }
 
 .tab.active {
-  color: var(--tab-active-color);
+  color: #ffffff; /* white text color */
   font-weight: 700;
+  background-color: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.3);
 }
-
 .tab.active::after {
   background-color: var(--tab-active-color);
-  transform: scaleX(1);
 }
 
-/* Close button hidden by default, show on tab hover */
+/* Close button */
 .tab .close-btn {
   opacity: 0;
   pointer-events: none;
+
+  font-size: 12px;
   font-weight: 700;
   color: var(--close-btn-color);
+
   cursor: pointer;
   user-select: none;
-  font-size: 12px;
+
   padding: 0 6px;
   border-radius: 3px;
+
   transition: opacity 0.2s ease, color 0.2s ease;
 }
 
@@ -268,30 +384,37 @@
   color: var(--close-btn-hover-color);
 }
 
-/* Keyboard focus visible */
-.tab:focus-visible {
-  outline: 2px solid var(--tab-active-color);
-  outline-offset: 2px;
+/* Focus styles */
+.tab:focus {
+  outline: none;
 }
 
+/* Add Tab Button */
 #addTabBtn {
+  flex-shrink: 0;
+
   padding: 0 12px;
   font-size: 24px;
   line-height: 1;
-  cursor: pointer;
+
   color: var(--tab-color);
   background: transparent;
   border: none;
+
+  cursor: pointer;
   user-select: none;
-  flex-shrink: 0;
+
   transition: color 0.25s ease;
 }
+
+
 
 #addTabBtn:hover,
 #addTabBtn:focus-visible {
   color: var(--tab-active-color);
   outline: none;
 }
+
 
 
     #controlsContainer {
@@ -384,6 +507,13 @@
       </button>
     </div>
   </div>
+
+  <div id="loadingScreen">
+  <div class="pulse-dot"></div>
+  <div class="loading-text">Loading <strong>Engine6.0</strong> · <span>Pulse Engine</span></div>
+</div>
+
+  
 
   <div id="container"></div>
 
@@ -908,6 +1038,17 @@
       if (animateFunc) animateFunc();
       requestAnimationFrame(animate);
     }
+
+      setTimeout(() => {
+    const loadingScreen = document.getElementById('loadingScreen');
+    if (loadingScreen) {
+      loadingScreen.style.transition = 'opacity 0.6s ease';
+      loadingScreen.style.opacity = '0';
+      setTimeout(() => {
+        loadingScreen.style.display = 'none';
+      }, 600); // match transition duration
+    }
+  }, 10000);
 
   </script>
 </body>
